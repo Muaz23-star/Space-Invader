@@ -1,0 +1,300 @@
+package invaders.engine;
+
+import invaders.GameObject;
+import invaders.entities.*;
+import invaders.physics.Vector2D;
+import invaders.rendering.Renderable;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import invaders.physics.Enemyloop;
+import invaders.entities.Bunker;
+
+/**
+ * This class manages the main loop and logic of the game
+ */
+public class GameEngine {
+
+	private List<GameObject> gameobjects;
+	private List<Renderable> renderables;
+	private final Player player;
+
+	private boolean left;
+	private boolean right;
+	private Direction enemyDirection = Direction.RIGHT;
+	private double enemySpeed = 0.5;
+
+	private int  Window_width;
+	private int  Window_height;
+
+	private int player_X;
+	private int player_Y;
+
+	private int player_lives;
+
+    public static enum Direction {
+		LEFT,
+		RIGHT
+	}
+	private int  enemyProjectiles = 0;
+
+	public GameEngine(String config){
+		gameobjects = new ArrayList<GameObject>();
+		renderables = new ArrayList<Renderable>();
+		EnemyABuilder enemyABuilder = new EnemyABuilder();
+
+		JSONParser parser = new JSONParser();
+
+		try {
+			Object obj = parser.parse(new FileReader("src/main/resources/config.json"));
+			JSONObject jsonObject = (JSONObject) obj;
+
+
+			JSONObject player = (JSONObject) jsonObject.get("Player");  // player info
+			this.player_lives = ((Number) player.get("lives")).intValue();
+
+
+			JSONObject playerPosition = (JSONObject) player.get("position"); // player position
+			this.player_X = ((Number) playerPosition.get("x")).intValue();
+			this.player_Y = ((Number) playerPosition.get("y")).intValue();
+
+
+			// getting game window size
+			JSONObject game = (JSONObject) jsonObject.get("Game");
+			JSONObject windowSize = (JSONObject) game.get("size");
+			this.Window_width = ((Number) windowSize.get("x")).intValue(); // Game window size
+			this.Window_height = ((Number) windowSize.get("y")).intValue();
+
+			// Looping through Bunkers
+			JSONArray bunkers = (JSONArray) jsonObject.get("Bunkers");
+			Iterator<?> bunkerIterator = bunkers.iterator();
+			while (bunkerIterator.hasNext()) {
+				JSONObject bunker = (JSONObject) bunkerIterator.next();
+				JSONObject bunkerPosition = (JSONObject) bunker.get("position");
+				JSONObject bunkerSize = (JSONObject) bunker.get("size");
+				double width = ((Number) bunkerSize.get("x")).intValue();
+				double height = ((Number) bunkerSize.get("y")).intValue();
+
+				int x = ((Number) bunkerPosition.get("x")).intValue();
+				int y = ((Number) bunkerPosition.get("y")).intValue();
+
+
+				Bunker newBunker = new Bunker(x, y, width, height);
+				this.renderables.add(newBunker);
+			}
+
+			// Looping through Enemies
+			JSONArray enemies = (JSONArray) jsonObject.get("Enemies");
+			Iterator<?> enemyIterator = enemies.iterator();
+			while (enemyIterator.hasNext()) {
+				JSONObject enemy = (JSONObject) enemyIterator.next();
+				JSONObject enemyPosition = (JSONObject) enemy.get("position");
+				int x = ((Number) enemyPosition.get("x")).intValue();
+				int y = ((Number) enemyPosition.get("y")).intValue();
+
+				//makes new enemy using the builder pattern
+				Enemy newEnemy = enemyABuilder.setSpeedType((String) enemy.get("projectile")).setPosition(x,y).setSpeed(0.5).getEnemy() ; // Example speed type
+
+
+
+				Enemyloop enemyloop = new Enemyloop(newEnemy);
+				enemyloop.start();
+				// (String) enemy.get("projectile")
+//				//adds enemy to list of game objects
+				this.renderables.add(newEnemy);
+
+
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+
+		player = new Player(new Vector2D(player_X, player_Y));
+		player.setHealth(this.player_lives);
+
+
+		renderables.add(player);
+
+	}
+
+	/**
+	 * Updates the game/simulation
+	 */
+	public void update(){
+		movePlayer();
+		updateEnemies();
+		//Collision();
+		for(GameObject go: gameobjects){
+			go.update();
+		}
+
+		// ensure that renderable foreground objects don't go off-screen
+		for(Renderable ro: renderables){
+			if(!ro.getLayer().equals(Renderable.Layer.FOREGROUND)){
+				continue;
+			}
+			if(ro.getPosition().getX() + ro.getWidth() >= 640) {
+				ro.getPosition().setX(639-ro.getWidth());
+			}
+
+			if(ro.getPosition().getX() <= 0) {
+				ro.getPosition().setX(1);
+			}
+
+			if(ro.getPosition().getY() + ro.getHeight() >= 400) {
+				ro.getPosition().setY(399-ro.getHeight());
+			}
+
+			if(ro.getPosition().getY() <= 0) {
+				ro.getPosition().setY(1);
+			}
+
+
+
+
+		}
+	}
+	private void updateEnemies() {
+		Enemy leftmost = null, rightmost = null;
+
+		// Move all enemies and find leftmost & rightmost enemies.
+		for (Renderable renderable : renderables) {
+			if (renderable instanceof Enemy enemy) {
+				enemy.SetSpeed(enemySpeed);
+
+				enemy.setDirection(enemyDirection);
+				enemy.move();
+
+				if (leftmost == null || enemy.getPosition().getX() < leftmost.getPosition().getX()) {
+					leftmost = enemy;
+				}
+
+				if (rightmost == null || enemy.getPosition().getX() > rightmost.getPosition().getX()) {
+					rightmost = enemy;
+				}
+			}
+
+		}
+
+		// Check for boundary collision with edge enemies.
+		if ((enemyDirection == Direction.RIGHT && rightmost.getPosition().getX() + rightmost.getWidth() >= 640) ||
+				(enemyDirection == Direction.LEFT && leftmost.getPosition().getX() <= 0)) {
+
+			enemyDirection = (enemyDirection == Direction.RIGHT) ? Direction.LEFT : Direction.RIGHT; // if else statement
+
+			// Move all enemies down a step if desired.
+			for (Renderable renderable : renderables) {
+				if (renderable instanceof Enemy) {
+					Enemy enemy = (Enemy) renderable;
+					enemy.moveDown();
+				}
+			}
+		}
+	}
+	public void SetEnemySpeed(double speed){
+		this.enemySpeed = speed;
+	}
+
+    public double getEnemySpeed() {
+		return this.enemySpeed;
+	}
+
+
+	public List<Renderable> getRenderables(){
+		return renderables;
+	}
+
+
+	public void leftReleased() {
+		this.left = false;
+	}
+
+	public void rightReleased(){
+		this.right = false;
+	}
+
+	public void leftPressed() {
+		this.left = true;
+	}
+	public void rightPressed(){
+		this.right = true;
+	}
+
+	public boolean shootPressed(){
+		//check if there is already a PlayerProjectile on the screen
+		List<Renderable> projectiles = renderables.stream()
+				.filter(r -> r instanceof PlayerProjectile)
+				.collect(Collectors.toList());
+		if(projectiles.size() > 0){
+			return false;
+		}
+		renderables.add(player.shoot());
+		return true;
+	}
+
+	public void EnemyShot(Enemy enemy){
+
+		renderables.add(enemy.shoot());
+		enemyProjectiles++;
+	}
+
+	public int getEnemyProjectiles() {
+		return enemyProjectiles;
+	}
+	public void setEnemyProjectiles(int enemyProjectiles) {
+		this.enemyProjectiles = enemyProjectiles;
+	}
+
+	private void movePlayer(){
+		if(left){
+			player.left();
+		}
+
+		if(right){
+			player.right();
+		}
+	}
+
+	public void randomEnemyShoot() {
+		List<Renderable> enemies = renderables.stream()
+				.filter(r -> r instanceof Enemy)
+				.collect(Collectors.toList());
+
+		if (enemies.isEmpty()) return;  // No enemies to shoot.
+
+		Random random = new Random();
+		Enemy randomEnemy = (Enemy) enemies.get(random.nextInt(enemies.size()));
+        System.out.println("Came here but " + getEnemyProjectiles()  );
+		if (getEnemyProjectiles() < 3) {
+			System.out.println("Enemy shot");
+			EnemyShot(randomEnemy);
+		}
+	}
+
+	public int getWindowWidth() {
+		return this.Window_width;
+	}
+	public int getWindowHeight() {
+		return this.Window_height;
+	}
+
+	public int getPlayerInitialX(){
+		return player_X;
+	}
+
+}
