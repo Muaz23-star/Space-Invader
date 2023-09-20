@@ -15,11 +15,13 @@ public class Bunker implements BunkerInterface, Renderable {
     private Image image;
     private String colour = "green";
     private ColourBunker currentColour;
+//
+//    public Bunker(){
+//
+//        this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), this.width, this.height, false, true);
+//    }
 
-    public Bunker(int x, int y, double width, double height){
-        this.position = new Vector2D(x,y);
-        this.width = width;
-        this.height = height;
+    public void setImage(){
         this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), this.width, this.height, false, true);
     }
 
@@ -40,6 +42,26 @@ public class Bunker implements BunkerInterface, Renderable {
         }
         currentColour.SetColour(this);
     }
+
+
+
+
+
+   public void setPosition(int x, int y) {
+       this.position = new Vector2D(x,y);
+    }
+
+   public void setWidth(int width) {
+       this.width = width;
+    }
+
+   public void setHeight(int height) {
+       this.height = height;
+    }
+
+
+
+
 
     @Override
     public int getHealth() {

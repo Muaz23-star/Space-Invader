@@ -2,6 +2,7 @@ package invaders.engine;
 
 import invaders.GameObject;
 import invaders.entities.*;
+import invaders.entities.EnemyABuilder;
 import invaders.physics.Vector2D;
 import invaders.rendering.Renderable;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import invaders.physics.Enemyloop;
 import invaders.entities.Bunker;
+
 
 /**
  * This class manages the main loop and logic of the game
@@ -51,6 +53,8 @@ public class GameEngine {
 		gameobjects = new ArrayList<GameObject>();
 		renderables = new ArrayList<Renderable>();
 		EnemyABuilder enemyABuilder = new EnemyABuilder();
+//		BunkerABuilder bunkerABuilder = new BunkerABuilder();
+//		BunkerDirector bunkerDirector = new BunkerDirector(bunkerABuilder);
 
 		JSONParser parser = new JSONParser();
 
@@ -81,14 +85,17 @@ public class GameEngine {
 				JSONObject bunker = (JSONObject) bunkerIterator.next();
 				JSONObject bunkerPosition = (JSONObject) bunker.get("position");
 				JSONObject bunkerSize = (JSONObject) bunker.get("size");
-				double width = ((Number) bunkerSize.get("x")).intValue();
-				double height = ((Number) bunkerSize.get("y")).intValue();
+				int width = ((Number) bunkerSize.get("x")).intValue();
+				int height = ((Number) bunkerSize.get("y")).intValue();
 
 				int x = ((Number) bunkerPosition.get("x")).intValue();
 				int y = ((Number) bunkerPosition.get("y")).intValue();
 
+				BunkerABuilder bunkerABuilder = new BunkerABuilder();
+				BunkerDirector bunkerDirector = new BunkerDirector(bunkerABuilder);
 
-				Bunker newBunker = new Bunker(x, y, width, height);
+				bunkerDirector.constructBunker(x,y,3,width,height); //creates new bunker using the builder pattern
+				Bunker newBunker = bunkerDirector.getBunker();
 				this.renderables.add(newBunker);
 			}
 
