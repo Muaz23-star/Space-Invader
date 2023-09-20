@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 
-public class Player implements Moveable, Damagable, Renderable {
+public class Player implements  Renderable {
 
     private final Vector2D position;
     private final Animator anim = null;
@@ -26,41 +26,26 @@ public class Player implements Moveable, Damagable, Renderable {
         this.position = position;
     }
 
-    @Override
-    public void takeDamage(double amount) {
-        this.health -= amount;
-    }
 
-    @Override
+
     public double getHealth() {
         return this.health;
     }
 
-    @Override
-    public boolean isAlive() {
-        return this.health > 0;
-    }
+
 
     public void setHealth(double health){
         this.health = health;
     }
 
-    @Override
-    public void up() {
-        return;
-    }
 
-    @Override
-    public void down() {
-        return;
-    }
 
-    @Override
+
     public void left() {
         this.position.setX(this.position.getX() - 1);
     }
 
-    @Override
+
     public void right() {
         this.position.setX(this.position.getX() + 1);
     }

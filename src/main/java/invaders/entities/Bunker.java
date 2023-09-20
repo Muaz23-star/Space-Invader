@@ -15,11 +15,7 @@ public class Bunker implements BunkerInterface, Renderable {
     private Image image;
     private String colour = "green";
     private ColourBunker currentColour;
-//
-//    public Bunker(){
-//
-//        this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), this.width, this.height, false, true);
-//    }
+
 
     public void setImage(){
         this.image = new Image(new File("src/main/resources/bunker.png").toURI().toString(), this.width, this.height, false, true);

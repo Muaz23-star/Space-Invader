@@ -53,8 +53,7 @@ public class GameEngine {
 		gameobjects = new ArrayList<GameObject>();
 		renderables = new ArrayList<Renderable>();
 		EnemyABuilder enemyABuilder = new EnemyABuilder();
-//		BunkerABuilder bunkerABuilder = new BunkerABuilder();
-//		BunkerDirector bunkerDirector = new BunkerDirector(bunkerABuilder);
+
 
 		JSONParser parser = new JSONParser();
 
