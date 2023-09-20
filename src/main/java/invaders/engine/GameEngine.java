@@ -124,12 +124,16 @@ public class GameEngine {
 		}
 
 
-		player = new Player(new Vector2D(player_X, player_Y));
-		player.setHealth(this.player_lives);
+		player = new Player(new Vector2D(player_X, player_Y)); //creates player
+		player.setHealth(this.player_lives); //sets player health
 
 
-		renderables.add(player);
-
+		renderables.add(player); //adds player to list of renderables
+        for (Renderable ro : renderables) {
+			if (ro instanceof Player) {
+				System.out.println("Player found");
+			}
+		}
 	}
 
 	/**
@@ -148,16 +152,16 @@ public class GameEngine {
 			if(!ro.getLayer().equals(Renderable.Layer.FOREGROUND)){
 				continue;
 			}
-			if(ro.getPosition().getX() + ro.getWidth() >= 640) {
-				ro.getPosition().setX(639-ro.getWidth());
+			if(ro.getPosition().getX() + ro.getWidth() >= getWindowWidth()) {
+				ro.getPosition().setX(getWindowWidth() -1 -ro.getWidth());
 			}
 
 			if(ro.getPosition().getX() <= 0) {
 				ro.getPosition().setX(1);
 			}
 
-			if(ro.getPosition().getY() + ro.getHeight() >= 400) {
-				ro.getPosition().setY(399-ro.getHeight());
+			if(ro.getPosition().getY() + ro.getHeight() >= getWindowHeight()) {
+				ro.getPosition().setY((getWindowHeight() - 1)-ro.getHeight());
 			}
 
 			if(ro.getPosition().getY() <= 0) {
@@ -180,11 +184,11 @@ public class GameEngine {
 				enemy.setDirection(enemyDirection);
 				enemy.move();
 
-				if (leftmost == null || enemy.getPosition().getX() < leftmost.getPosition().getX()) {
+				if (leftmost == null || enemy.getPosition().getX() < leftmost.getPosition().getX()) { //finds the leftmost enemy
 					leftmost = enemy;
 				}
 
-				if (rightmost == null || enemy.getPosition().getX() > rightmost.getPosition().getX()) {
+				if (rightmost == null || enemy.getPosition().getX() > rightmost.getPosition().getX()) { //finds the rightmost enemy
 					rightmost = enemy;
 				}
 			}
@@ -192,10 +196,10 @@ public class GameEngine {
 		}
 
 		// Check for boundary collision with edge enemies.
-		if ((enemyDirection == Direction.RIGHT && rightmost.getPosition().getX() + rightmost.getWidth() >= 640) ||
+		if ((enemyDirection == Direction.RIGHT && rightmost.getPosition().getX() + rightmost.getWidth() >= getWindowWidth()) ||
 				(enemyDirection == Direction.LEFT && leftmost.getPosition().getX() <= 0)) {
 
-			enemyDirection = (enemyDirection == Direction.RIGHT) ? Direction.LEFT : Direction.RIGHT; // if else statement
+			enemyDirection = (enemyDirection == Direction.RIGHT) ? Direction.LEFT : Direction.RIGHT; // if else statement to change direction
 
 			// Move all enemies down a step if desired.
 			for (Renderable renderable : renderables) {

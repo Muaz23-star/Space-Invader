@@ -66,13 +66,13 @@ public class Player implements Moveable, Damagable, Renderable {
     }
 
     public PlayerProjectile shoot(){
-        // create a new projectile
+        // create a new projectile using Factory pattern
 
         Projectile projectile =  ProjectileFactory.createProjectile("player",this.position);
 
 
-        GameLoop gameLoop = new GameLoop(projectile); // Replace 'playerProjectile' with your actual projectile instance
-        gameLoop.start();
+        GameLoop gameLoop = new GameLoop(projectile); // Helps the projectile to move smoothly
+        gameLoop.start();  // Starts the game loop
 
         return (PlayerProjectile) projectile;
 

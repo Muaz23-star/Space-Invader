@@ -36,12 +36,12 @@ public class Enemy implements Enemy_Interface,Renderable {
 
 
     public EnemyProjectile shoot(){
-        // create a new projectile
+        // create a new projectile using Factory pattern
 
-        Projectile projectile = ProjectileFactory.createProjectile("enemy",this.position,this.Speedtype); //Projectile created using Factory pattern
+        Projectile projectile = ProjectileFactory.createProjectile("enemy",this.position,this.Speedtype);
 
 
-        GameLoop gameLoop = new GameLoop(projectile); // Replace 'playerProjectile' with your actual projectile instance
+        GameLoop gameLoop = new GameLoop(projectile); // create a new game loop for the projectile
         gameLoop.start();
 
         return (EnemyProjectile) projectile;

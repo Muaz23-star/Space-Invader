@@ -206,7 +206,7 @@ public class GameWindow {
                         if (bunker.collidesWith(projectile)) {
                             if (bunker.getHealth() > 0) {
                                 bunker.setHealth(bunker.getHealth() - 1);
-                                bunker.setColour();
+                                bunker.updateColourState();
                             }
                             if (bunker.getHealth() == 0) {
                                 toBeRemoved.add(ro); // remove the bunker when its health is 0

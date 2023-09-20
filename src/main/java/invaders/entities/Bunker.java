@@ -14,6 +14,7 @@ public class Bunker implements BunkerInterface, Renderable {
     private int health = 3;
     private Image image;
     private String colour = "green";
+    private ColourBunker currentColour;
 
     public Bunker(int x, int y, double width, double height){
         this.position = new Vector2D(x,y);
@@ -24,19 +25,20 @@ public class Bunker implements BunkerInterface, Renderable {
 
 
     @Override
-    public void setColour() {  //State pattern
-        ColourBunker colourBunker = null;
-        if (health == 3) {
-            colourBunker = new GreenBunker(width, height);
-            colourBunker.SetColour(this);
-        }else if (health == 2) {
-            colourBunker = new YellowBunker(width, height);
-            colourBunker.SetColour(this);
+    public void updateColourState() {  //updates the colour of bunkers using the State pattern
 
-        }else if (health == 1){
-            colourBunker = new RedBunker(width, height);
-            colourBunker.SetColour(this);
+        switch (health) {
+            case 3:
+                currentColour = new GreenBunker(width, height);
+                break;
+            case 2:
+                currentColour = new YellowBunker(width, height);
+                break;
+            case 1:
+                currentColour = new RedBunker(width, height);
+                break;
         }
+        currentColour.SetColour(this);
     }
 
     @Override
