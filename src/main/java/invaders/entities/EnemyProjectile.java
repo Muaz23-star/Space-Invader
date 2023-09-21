@@ -31,6 +31,11 @@ public class EnemyProjectile implements Projectile, Renderable  {
     }
 
 
+    public boolean collidesWith(PlayerProjectile projectile) {
+        return CollidePlayerProjectile.collidesWith(projectile, position,  width,  height);
+    }
+
+
 
     @Override
     public void move() throws InterruptedException {

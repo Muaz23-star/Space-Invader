@@ -149,6 +149,23 @@ public class CollisionDetector {
         List<Renderable> toBeRemoved = new ArrayList<>();
 
         for (Renderable projectile : renderables) {
+            if (projectile instanceof  EnemyProjectile){
+                EnemyProjectile enemyProjectile = (EnemyProjectile) projectile;
+                for(Renderable projectile2 : renderables){
+                    if(projectile instanceof PlayerProjectile){
+                        PlayerProjectile playerProjectile = (PlayerProjectile) projectile2;
+                        if(enemyProjectile.collidesWith(playerProjectile)){
+                            toBeRemoved.add(projectile);
+                            toBeRemoved.add(projectile2);
+                            view.markEntityViewForDelete(projectile);
+                            view.markEntityViewForDelete(projectile2);
+                        }
+                    }
+                }
+            }
+
+
+
             if (projectile instanceof EnemyProjectile && projectile.getPosition().getY() > model.getWindowHeight() - 13) {
                 toBeRemoved.add(projectile);
                 view.markEntityViewForDelete(projectile);

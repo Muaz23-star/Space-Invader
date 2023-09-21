@@ -60,27 +60,7 @@ public class Enemy implements Enemy_Interface,Renderable {
 
     @Override
     public boolean collidesWith(PlayerProjectile projectile) {
-        // Enemy's boundaries
-        double enemyLeft = this.position.getX();
-        double enemyRight = this.position.getX() + this.width;
-        double enemyTop = this.position.getY();
-        double enemyBottom = this.position.getY() + this.height;
-
-        // PlayerProjectile's boundaries
-        double projectileLeft = projectile.getPosition().getX();
-        double projectileRight = projectile.getPosition().getX() + projectile.getWidth();
-        double projectileTop = projectile.getPosition().getY();
-        double projectileBottom = projectile.getPosition().getY() + projectile.getHeight();
-
-        // Check for intersection
-        if (enemyLeft < projectileRight &&
-                enemyRight > projectileLeft &&
-                enemyTop < projectileBottom &&
-                enemyBottom > projectileTop) {
-            return true;  // Collision occurs
-        } else {
-            return false;
-        }
+        return CollidePlayerProjectile.collidesWith(projectile, position,  width,  height);
     }
 
     public boolean collidesWithBunker(Bunker bunker){
