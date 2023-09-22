@@ -3,7 +3,6 @@ package invaders.entities;
 import invaders.engine.GameEngine;
 import invaders.physics.GameLoop;
 import invaders.physics.Vector2D;
-import invaders.rendering.Animator;
 import invaders.rendering.Renderable;
 
 import javafx.scene.image.Image;
@@ -17,7 +16,7 @@ public class Enemy implements Enemy_Interface,Renderable {
     private final double width = 25;
     private final double height = 30;
     private final Image image;
-    private final int points = 10;
+
     private final String Speedtype;
     private GameEngine.Direction direction;
     private boolean remove = false;
@@ -87,10 +86,7 @@ public class Enemy implements Enemy_Interface,Renderable {
         }
     }
 
-    @Override
-    public int getPoints() {
-        return 0;
-    }
+
 
     @Override
     public boolean collidesWithPlayer(Player player) {
@@ -117,12 +113,6 @@ public class Enemy implements Enemy_Interface,Renderable {
         }
     }
 
-
-    @Override
-    public void setPosition(double x, double y) {
-        this.position.setX(x);
-        this.position.setY(y);
-    }
 
     @Override
     public Image getImage() {

@@ -4,9 +4,6 @@ import invaders.physics.Vector2D;
 
 public interface Projectile {
 
-//   public boolean collidesWith(invaders.physics.Vector2D enemy); //checks if collison occurs
-
-//   public void onCollision(invaders.logic.Damagable other); //what happens when collision occurs
 
    public void move() throws InterruptedException; //moves the projectile
    public Vector2D getPosition(); //gets the position of the projectile

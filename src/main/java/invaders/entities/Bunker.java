@@ -13,7 +13,7 @@ public class Bunker implements BunkerInterface, Renderable {
     private double height;
     private int health = 3;
     private Image image;
-    private String colour = "green";
+
     private ColourBunker currentColour;
 
 

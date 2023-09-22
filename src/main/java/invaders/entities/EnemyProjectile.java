@@ -12,7 +12,7 @@ public class EnemyProjectile implements Projectile, Renderable  {
     private final double width = 10;
     private final double height = 10;
     private boolean active = true; // life of projectile
-    private final String Speedtype;
+
     private double speed;
     private MovementProjectile movement_type;
 
@@ -22,13 +22,16 @@ public class EnemyProjectile implements Projectile, Renderable  {
         this.position.setX(position.getX() + 11.5);
         this.position.setY(position.getY());
         this.image = new Image(new File("src/main/resources/shot.png").toURI().toString(), width, height, true, true);
-        this.Speedtype = Speedtype;
+
+
+
         if (Speedtype.equals("slow_straight")) {
             movement_type = new SlowMovementProjectile();
         }else {
             movement_type = new FastMovementProjectile();
         }
     }
+
 
 
     public boolean collidesWith(PlayerProjectile projectile) {

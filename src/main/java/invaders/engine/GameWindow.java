@@ -31,7 +31,8 @@ public class GameWindow {
     private CollisionDetector collisionDetector;
 
 	public GameWindow(GameEngine model, int width, int height){
-		this.width = width;
+
+        this.width = width;
         this.height = height;
         this.model = model;
         pane = new Pane();
@@ -48,8 +49,6 @@ public class GameWindow {
         this.renderables = model.getRenderables();
         this.timer = new ShootingTimer(this.model);
 
-
-
     }
 
 	public void run() {
@@ -63,10 +62,12 @@ public class GameWindow {
 
     private void draw(){
         model.update();
+        model.checkRenderables();
         collisionDetector.CollisionEnemy();
         collisionDetector.CollisionBunker();
         collisionDetector.CollisionPlayer();
         collisionDetector.removeProjectiles();
+
 
         this.timer.start();
 

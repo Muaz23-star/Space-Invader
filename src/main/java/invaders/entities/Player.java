@@ -1,10 +1,10 @@
 package invaders.entities;
 import invaders.physics.GameLoop;
 
-import invaders.logic.Damagable;
-import invaders.physics.Moveable;
+
+
 import invaders.physics.Vector2D;
-import invaders.rendering.Animator;
+
 import invaders.rendering.Renderable;
 
 import javafx.scene.image.Image;
@@ -14,7 +14,7 @@ import java.io.File;
 public class Player implements  Renderable {
 
     private final Vector2D position;
-    private final Animator anim = null;
+
     private double health = 3;
 
     private final double width = 25;

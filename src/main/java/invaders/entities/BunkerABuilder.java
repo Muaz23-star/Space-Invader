@@ -6,9 +6,6 @@ public class BunkerABuilder implements BunkerBuilderInterface {
     public BunkerABuilder(){
         bunker = new Bunker();
     }
-
-
-
     @Override
     public void setPosition(int x, int y) {
         bunker.setPosition(x,y);
@@ -33,8 +30,6 @@ public class BunkerABuilder implements BunkerBuilderInterface {
     public void setImage() {
         bunker.setImage();
     }
-
-
     @Override
     public Bunker getBunker() {
         return bunker;

@@ -26,7 +26,7 @@ import invaders.entities.Bunker;
  */
 public class GameEngine {
 
-	private List<GameObject> gameobjects;
+
 	private List<Renderable> renderables;
 	private final Player player;
 
@@ -50,7 +50,7 @@ public class GameEngine {
 	private int  enemyProjectiles = 0;
 
 	public GameEngine(String config){
-		gameobjects = new ArrayList<GameObject>();
+
 		renderables = new ArrayList<Renderable>();
 		EnemyABuilder enemyABuilder = new EnemyABuilder();
 
@@ -149,9 +149,7 @@ public class GameEngine {
 		movePlayer();
 		updateEnemies();
 		//Collision();
-		for(GameObject go: gameobjects){
-			go.update();
-		}
+
 
 		// ensure that renderable foreground objects don't go off-screen
 		for(Renderable ro: renderables){
@@ -200,6 +198,12 @@ public class GameEngine {
 			}
 
 		}
+
+
+		if (rightmost == null || leftmost == null) {
+			System.out.println("Game Over! all enemies are dead");
+			System.exit(0);
+		};
 
 		// Check for boundary collision with edge enemies.
 		if ((enemyDirection == Direction.RIGHT && rightmost.getPosition().getX() + rightmost.getWidth() >= getWindowWidth()) ||
@@ -305,6 +309,22 @@ public class GameEngine {
 
 	public int getPlayerInitialX(){
 		return player_X;
+	}
+
+	public void checkRenderables(){
+//		if(renderables.isEmpty()){
+//			System.out.println("Game over!");
+//			System.exit(0);
+//		}
+
+		// check if there is no enemy then exit
+		List<Renderable> enemies = renderables.stream()
+				.filter(r -> r instanceof Enemy)
+				.collect(Collectors.toList());
+		if(enemies.isEmpty()){
+			System.out.println("Game over!");
+			System.exit(0);
+		}
 	}
 
 }

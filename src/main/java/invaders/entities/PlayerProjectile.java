@@ -1,14 +1,13 @@
 package invaders.entities;
 
 
-import invaders.logic.Damagable;
-import invaders.physics.Moveable;
+
 import invaders.physics.Vector2D;
-import invaders.rendering.Animator;
+
 import invaders.rendering.Renderable;
 import invaders.physics.GameLoop;
 
-import invaders.logic.Damagable;
+
 import javafx.scene.image.Image;
 
 import java.io.File;
