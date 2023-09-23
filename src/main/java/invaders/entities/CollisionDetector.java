@@ -55,8 +55,8 @@ public class CollisionDetector {
                     } else if (ro2 instanceof Player) {
                         Player player = (Player) ro2;
                         if (enemy.collidesWithPlayer(player)) {
-                            System.out.println("Game is over!!");
-                            System.exit(0);
+                            model.setGameOver();
+                            return;
                         }
 
                     }

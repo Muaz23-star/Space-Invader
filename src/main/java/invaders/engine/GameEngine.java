@@ -57,6 +57,7 @@ public class GameEngine {
 		RIGHT
 	}
 	private int  enemyProjectiles = 0;
+	private boolean GameWin = false;
 
 	public GameEngine(String config){
 
@@ -216,6 +217,7 @@ public class GameEngine {
 
 		if (rightmost == null || leftmost == null) {
 			isGameOver = true;
+			GameWin = true;
 			return;
 		};
 
@@ -307,9 +309,7 @@ public class GameEngine {
 
 		Random random = new Random();
 		Enemy randomEnemy = (Enemy) enemies.get(random.nextInt(enemies.size()));
-        System.out.println("Came here but " + getEnemyProjectiles()  );
-		if (getEnemyProjectiles() < 3) {
-			System.out.println("Enemy shot");
+		if (getEnemyProjectiles() <= 3) {
 			EnemyShot(randomEnemy);
 		}
 	}
@@ -348,5 +348,9 @@ public class GameEngine {
 	}
 	public void setGameOver() { // used in collision deterctor
 		isGameOver = true;
+	}
+
+	public boolean isGameWon(){
+		return GameWin;
 	}
 }

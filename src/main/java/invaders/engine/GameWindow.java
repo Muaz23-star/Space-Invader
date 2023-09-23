@@ -36,6 +36,7 @@ public class GameWindow {
     private ShootingTimer timer;
     private CollisionDetector collisionDetector;
     private Image gameover;
+    private Image gamewon;
     private ImageView gameOverView;
     private boolean isGameOverDisplayed = false;
 
@@ -59,6 +60,7 @@ public class GameWindow {
         entityViews = new ArrayList<EntityView>();
         this.renderables = model.getRenderables();
         this.timer = new ShootingTimer(this.model);
+        gamewon = new Image(new File("src/main/resources/congratulations.png").toURI().toString(),model.getWindowWidth(), model.getWindowHeight(), false, true);
         gameover = new Image(new File("src/main/resources/gameover.png").toURI().toString(),model.getWindowWidth(), model.getWindowHeight(), false, true);
         gameOverView = new ImageView(gameover);
 
@@ -134,6 +136,16 @@ public class GameWindow {
     }
 
     public void gameOver(){
+
+        if (model.isGameWon() && !isGameOverDisplayed) {
+            pane.getChildren().removeAll();
+            pane.getChildren().add(new ImageView(gamewon));
+            isGameOverDisplayed = true;
+
+        }else{
+            return;
+        }
+
         if (model.checkGameOver() && !isGameOverDisplayed){
             pane.getChildren().removeAll();
             pane.getChildren().add(gameOverView);
