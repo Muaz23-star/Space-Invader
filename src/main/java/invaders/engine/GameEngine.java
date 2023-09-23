@@ -42,6 +42,7 @@ public class GameEngine {
 	private int player_Y;
 
 	private int player_lives;
+	private String player_colour;
 
     public static enum Direction {
 		LEFT,
@@ -64,6 +65,9 @@ public class GameEngine {
 
 			JSONObject player = (JSONObject) jsonObject.get("Player");  // player info
 			this.player_lives = ((Number) player.get("lives")).intValue();
+			this.player_colour = (String) player.get("colour");
+
+
 
 
 			JSONObject playerPosition = (JSONObject) player.get("position"); // player position
@@ -132,6 +136,7 @@ public class GameEngine {
 
 		player = new Player(new Vector2D(player_X, player_Y)); //creates player
 		player.setHealth(this.player_lives); //sets player health
+		player.setColour(player_colour.toLowerCase()); //sets player colour
 
 
 		renderables.add(player); //adds player to list of renderables

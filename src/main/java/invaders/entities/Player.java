@@ -19,11 +19,24 @@ public class Player implements  Renderable {
 
     private final double width = 25;
     private final double height = 30;
-    private final Image image;
+    private Image image;
 
     public Player(Vector2D position){
-        this.image = new Image(new File("src/main/resources/player.png").toURI().toString(), width, height, true, true);
+        this.image = new Image(new File("src/main/resources/grey_player.png").toURI().toString(), width, height, true, true);
         this.position = position;
+    }
+
+    public void setColour(String colour){
+        if(colour.equals("black")) {
+            this.image = new Image(new File("src/main/resources/black_player.png").toURI().toString(), width, height, true, true);
+        }else if(colour.equals("grey")){
+            this.image = new Image(new File("src/main/resources/grey_player.png").toURI().toString(), width, height, true, true);
+        } else if (colour.equals("white")) {
+            this.image = new Image(new File("src/main/resources/white_player.png").toURI().toString(), width, height, true, true);
+
+        } else if (colour.equals("blue")) {
+            this.image = new Image(new File("src/main/resources/blue_player.png").toURI().toString(), width, height, true, true);
+        }
     }
 
 
