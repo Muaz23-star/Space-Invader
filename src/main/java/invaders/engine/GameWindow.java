@@ -1,10 +1,13 @@
 package invaders.engine;
+import java.io.File;
 import java.util.*;
 
 import java.util.stream.Collectors;
 
 import invaders.entities.*;
 import javafx.animation.AnimationTimer;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import invaders.rendering.Renderable;
@@ -13,6 +16,9 @@ import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import invaders.physics.ShootingTimer;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 
 public class GameWindow {
 	private final int width;
@@ -29,8 +35,12 @@ public class GameWindow {
     private List<Renderable> renderables;
     private ShootingTimer timer;
     private CollisionDetector collisionDetector;
+    private Image gameover;
+    private ImageView gameOverView;
+    private boolean isGameOverDisplayed = false;
 
-	public GameWindow(GameEngine model, int width, int height){
+
+    public GameWindow(GameEngine model, int width, int height){
 
         this.width = width;
         this.height = height;
@@ -40,6 +50,7 @@ public class GameWindow {
         this.background = new SpaceBackground(model, pane);
         collisionDetector = new CollisionDetector(model, this);
 
+
         KeyboardInputHandler keyboardInputHandler = new KeyboardInputHandler(this.model);
 
         scene.setOnKeyPressed(keyboardInputHandler::handlePressed);
@@ -48,6 +59,8 @@ public class GameWindow {
         entityViews = new ArrayList<EntityView>();
         this.renderables = model.getRenderables();
         this.timer = new ShootingTimer(this.model);
+        gameover = new Image(new File("src/main/resources/gameover.png").toURI().toString(),model.getWindowWidth(), model.getWindowHeight(), false, true);
+        gameOverView = new ImageView(gameover);
 
     }
 
@@ -67,6 +80,7 @@ public class GameWindow {
         collisionDetector.CollisionBunker();
         collisionDetector.CollisionPlayer();
         collisionDetector.removeProjectiles();
+        gameOver();
 
 
         this.timer.start();
@@ -116,6 +130,16 @@ public class GameWindow {
                 view.markForDelete();
                 break;
             }
+        }
+    }
+
+    public void gameOver(){
+        if (model.checkGameOver() && !isGameOverDisplayed){
+            pane.getChildren().removeAll();
+            pane.getChildren().add(gameOverView);
+            isGameOverDisplayed = true;
+        }else{
+            return;
         }
     }
 

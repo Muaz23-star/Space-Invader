@@ -90,8 +90,8 @@ public class CollisionDetector {
 
                                 view.markEntityViewForDelete(ro);
                                 view.markEntityViewForDelete(ro2);
-                                System.out.println("Game is over");
-                                System.exit(0);
+                                model.setGameOver();
+                                return;
 
 
 

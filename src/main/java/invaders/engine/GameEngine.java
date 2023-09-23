@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
 
 import invaders.physics.Enemyloop;
 import invaders.entities.Bunker;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.io.File;
 
 
 /**
@@ -45,6 +48,10 @@ public class GameEngine {
 	private String player_colour;
 	private int player_speed;
 
+	private boolean isGameOver = false;
+
+
+
     public static enum Direction {
 		LEFT,
 		RIGHT
@@ -55,6 +62,7 @@ public class GameEngine {
 
 		renderables = new ArrayList<Renderable>();
 		EnemyABuilder enemyABuilder = new EnemyABuilder();
+
 
 
 		JSONParser parser = new JSONParser();
@@ -207,8 +215,8 @@ public class GameEngine {
 
 
 		if (rightmost == null || leftmost == null) {
-			System.out.println("Game Over! all enemies are dead");
-			System.exit(0);
+			isGameOver = true;
+			return;
 		};
 
 		// Check for boundary collision with edge enemies.
@@ -328,9 +336,17 @@ public class GameEngine {
 				.filter(r -> r instanceof Enemy)
 				.collect(Collectors.toList());
 		if(enemies.isEmpty()){
-			System.out.println("Game over!");
-			System.exit(0);
+			isGameOver = true;
+			return;
+
 		}
 	}
 
+
+	public boolean checkGameOver() {
+		return isGameOver;
+	}
+	public void setGameOver() { // used in collision deterctor
+		isGameOver = true;
+	}
 }
