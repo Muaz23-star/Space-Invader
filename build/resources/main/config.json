@@ -7,7 +7,7 @@
   },
   "Player": {
     "colour": "white",
-    "speed": 1,
+    "speed": 4,
     "lives": 3,
     "position": {
       "x": 300,

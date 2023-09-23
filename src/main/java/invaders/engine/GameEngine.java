@@ -43,6 +43,7 @@ public class GameEngine {
 
 	private int player_lives;
 	private String player_colour;
+	private int player_speed;
 
     public static enum Direction {
 		LEFT,
@@ -66,7 +67,7 @@ public class GameEngine {
 			JSONObject player = (JSONObject) jsonObject.get("Player");  // player info
 			this.player_lives = ((Number) player.get("lives")).intValue();
 			this.player_colour = (String) player.get("colour");
-
+			this.player_speed = ((Number) player.get("speed")).intValue();
 
 
 
@@ -135,7 +136,7 @@ public class GameEngine {
 
 
 		player = new Player(new Vector2D(player_X, player_Y)); //creates player
-		player.setHealth(this.player_lives); //sets player health
+		player.setHealth(this.player_lives -1 ); //sets player health
 		player.setColour(player_colour.toLowerCase()); //sets player colour
 
 
@@ -281,11 +282,11 @@ public class GameEngine {
 
 	private void movePlayer(){
 		if(left){
-			player.left();
+			player.left(player_speed);
 		}
 
 		if(right){
-			player.right();
+			player.right(player_speed);
 		}
 	}
 

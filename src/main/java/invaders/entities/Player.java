@@ -54,13 +54,13 @@ public class Player implements  Renderable {
 
 
 
-    public void left() {
-        this.position.setX(this.position.getX() - 1);
+    public void left(int speed) {
+        this.position.setX(this.position.getX() - speed);
     }
 
 
-    public void right() {
-        this.position.setX(this.position.getX() + 1);
+    public void right(int speed) {
+        this.position.setX(this.position.getX() + speed);
     }
 
     public PlayerProjectile shoot(){
